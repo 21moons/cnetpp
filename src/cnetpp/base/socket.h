@@ -56,15 +56,20 @@ namespace base {
 
 // socket base class
 // please use StreamSocket, DatagramSocket or ListenSocket instead
+// 基于 socket 进行封装 
 class Socket {
  protected:
   Socket() : fd_(-1) {
   }
+  // 按照默认规定, 只有一个参数的构造函数也定义了一个隐式转换(转换构造函数), 将该构造函数对应数据类型的数据转换为该类对象
+  // explicit 用在这里是禁止 Socket(int fd) 的隐式转换或复制初始化
   explicit Socket(int fd) : fd_(fd) {
   }
   bool Create(int af, int type, int protocol = 0);
  
  public:
+  // 基类的析构函数一般都是虚函数, 这样做是为了当用一个基类的指针删除一个派生类的对象时, 派生类的析构函数能被调用
+  // 通过这种方式, 可以在 C++ 中实现类似于 java 的基于接口编程机制
   virtual ~Socket() {
     Close();
   }
